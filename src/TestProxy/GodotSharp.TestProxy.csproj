@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>    
+    <Nullable>enable</Nullable>    
+  </PropertyGroup>
+  <ItemGroup>        
+  		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="GodotSharp" Version="4.1.1" /> 
+		<PackageReference Include="GodotSharpEditor" Version="4.1.1" />            
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />        
+        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.7.2" />                
+        <PackageReference Include="Microsoft.VisualStudio.Shared.VSCodeDebugProtocol" Version="17.2.60629.1" />
+        <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />   
+		<ProjectReference Include="..\TestAdapter\GodotSharp.TestAdapter.csproj" />
+    </ItemGroup>
+</Project>

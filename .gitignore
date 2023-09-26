@@ -1,0 +1,9 @@
+.godot/
+.mono/
+*.suo
+*.user
+_ReSharper.*
+obj/
+bin/
+packages
+.fake

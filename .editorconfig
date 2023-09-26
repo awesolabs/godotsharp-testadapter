@@ -1,0 +1,34 @@
+root = true
+
+[*.cs]
+csharp_indent_braces = false
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_before_members_in_object_initializers = false
+csharp_new_line_before_open_brace = none
+csharp_preferred_modifier_order = public, private, protected, internal, file, override, virtual, static, abstract, sealed, readonly, new, extern, unsafe, volatile, async, required:suggestion
+csharp_preserve_single_line_blocks = true
+csharp_preserve_single_line_statements = true
+csharp_space_before_semicolon_in_for_statement = true
+csharp_style_allow_blank_lines_between_consecutive_braces_experimental = false:error
+csharp_style_expression_bodied_accessors = true:suggestion
+csharp_style_expression_bodied_constructors = false:none
+csharp_style_expression_bodied_methods = false:none
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_namespace_declarations = file_scoped:error
+csharp_style_var_for_built_in_types = true
+csharp_style_var_when_type_is_apparent = true
+csharp_using_directive_placement = inside_namespace:error
+dotnet_diagnostic.cs8981.severity = none
+dotnet_diagnostic.ide0009.severity = error
+dotnet_diagnostic.ide0065.severity = error
+dotnet_diagnostic.ide0161.severity = error
+dotnet_diagnostic.ide2000.severity = error
+dotnet_diagnostic.ide2002.severity = error
+dotnet_style_allow_multiple_blank_lines_experimental = false:error
+dotnet_style_qualification_for_event = true:error
+dotnet_style_qualification_for_field = true:error
+dotnet_style_qualification_for_method = true:error
+dotnet_style_qualification_for_property = true:error
+indent_size = tab
+indent_style = tab
+tab_width = 4

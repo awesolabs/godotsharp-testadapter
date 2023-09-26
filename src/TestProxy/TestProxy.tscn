@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://b7gkywkghu4wn"]
+
+[ext_resource type="Script" path="res://addons/GodotSharp.TestAdapter/TestProxy.cs" id="1_owq1o"]
+
+[node name="TestProxy" type="Node"]
+script = ExtResource("1_owq1o")
