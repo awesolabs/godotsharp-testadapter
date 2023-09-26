@@ -2,11 +2,21 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-  </PropertyGroup>
+  </PropertyGroup>  
   <ItemGroup>
   	<FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
 	<ProjectReference Include="..\..\src\TestAdapter\GodotSharp.TestAdapter.csproj" />
   </ItemGroup>
+  <PropertyGroup>
+    <TestProxySourceDir>../../src/TestProxy/</TestProxySourceDir>
+    <TestProxyDestDir>$(MSBuildThisFileDirectory)addons/GodotSharp.TestAdapter/</TestProxyDestDir>
+  </PropertyGroup>  
+  <Target Name="CopyTestProxyFiles" BeforeTargets="BeforeBuild">
+    <ItemGroup>      
+      <FilesToCopy Include="$(TestProxySourceDir)*.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(TestProxyDestDir)" />
+  </Target>
 </Project>
