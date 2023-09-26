@@ -100,49 +100,67 @@ public class TestRunner : ITestDiscoverer, ITestExecutor2 {
 		this.Logger = new TestLogger(
 			logger: frameworkHandle
 		);
-		var executions = new List<Task>();
-		var testConfig = this.LoadTestConfig();
-		foreach (var test in tests) {
-			frameworkHandle.RecordStart(
-				testCase: test
-			);
-			var startInfo = new ProcessStartInfo {
-				FileName = testConfig.GodotExecutablePath,
-				WorkingDirectory = testConfig.GodotProjectDirectory,
-				Arguments = @"--headless addons/GodotSharp.TestAdapter/TestProxy.tscn",
-				UseShellExecute = true,
-				CreateNoWindow = true
-			};
-			var process = new Process {
-				StartInfo = startInfo
-			};
-			process.Start();
-			if (runContext.IsBeingDebugged && frameworkHandle is IFrameworkHandle2 fh2) {
-				fh2.AttachDebuggerToProcess(
-					pid: process.Id
+		var executions = new List<Task>();		
+		foreach (var test in tests) {			
+			try {				
+				frameworkHandle.RecordStart(
+					testCase: test
 				);
-			}
-			var execution = Task.Run(
-				function: () => this.ExecuteTest(
-					testCase: test,
-					handle: frameworkHandle,
-					proxyProcessId: process.Id
-				)
-			).ContinueWith(
-				continuationAction: (Task<TestResult> result) => {
-					process.Kill();
-					frameworkHandle.RecordResult(
-						testResult: result.Result
-					);
-					frameworkHandle.RecordEnd(
-						testCase: test,
-						outcome: result.Result.Outcome
+				var testConfig = this.LoadTestConfig();
+				var startInfo = new ProcessStartInfo {
+					FileName = testConfig.GodotExecutablePath,
+					WorkingDirectory = testConfig.GodotProjectDirectory,
+					Arguments = @"--headless addons/GodotSharp.TestAdapter/TestProxy.tscn",
+					UseShellExecute = true,
+					CreateNoWindow = true
+				};
+				var process = new Process {
+					StartInfo = startInfo
+				};
+				process.Start();
+				if (runContext.IsBeingDebugged && frameworkHandle is IFrameworkHandle2 fh2) {
+					fh2.AttachDebuggerToProcess(
+						pid: process.Id
 					);
 				}
-			);
-			executions.Add(
-				item: execution
-			);
+				var execution = Task.Run(
+					function: () => this.ExecuteTest(
+						testCase: test,
+						handle: frameworkHandle,
+						proxyProcessId: process.Id
+					)
+				).ContinueWith(
+					continuationAction: (Task<TestResult> result) => {
+						process.Kill();
+						frameworkHandle.RecordResult(
+							testResult: result.Result
+						);
+						frameworkHandle.RecordEnd(
+							testCase: test,
+							outcome: result.Result.Outcome
+						);
+					}
+				);
+				executions.Add(
+					item: execution
+				);
+			}
+			catch (Exception e) {
+				var result = new TestResult(testCase: test) {
+					DisplayName = test.DisplayName,
+					EndTime = DateTime.UtcNow,
+					ErrorMessage = e.Message,
+					ErrorStackTrace = e.StackTrace,
+					Outcome = TestOutcome.Failed,
+				};
+				frameworkHandle.RecordResult(
+					testResult: result
+				);
+				frameworkHandle.RecordEnd(
+					testCase: test,
+					outcome: TestOutcome.Failed
+				);
+			}
 		}
 		Task.WhenAll(tasks: executions).GetAwaiter().GetResult();
 	}
@@ -219,6 +237,7 @@ public class TestRunner : ITestDiscoverer, ITestExecutor2 {
 			uriString: $"http://127.0.0.1:{proxyProcessId}"
 		);
 		var result = new TestResult(testCase: testCase) {
+			DisplayName = testCase.DisplayName,			
 			StartTime = start
 		};
 		try {
@@ -254,7 +273,7 @@ public class TestRunner : ITestDiscoverer, ITestExecutor2 {
 			result.ErrorMessage = runResult.ErrorMessage;
 			result.ErrorStackTrace = runResult.ErrorStackTrace;
 		}
-		catch (Exception e) {
+		catch (Exception e) {			
 			result.Outcome = TestOutcome.Failed;
 			result.ErrorMessage = e.ToString();
 			result.ErrorStackTrace = e.StackTrace;

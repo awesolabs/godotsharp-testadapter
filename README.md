@@ -10,7 +10,7 @@ An experimental .NET Test Adapter for the Godot 4 game engine.
 	- [Visual Studio 2022 Integration](#visual-studio-2022-integration)
 	- [Godot Editor Integration](#godot-editor-integration)
 - [Installation](#installation)
-	- [Install Nuget Packages](#install-nuget-packages)
+	- [Install Nuget Packages and Project References](#install-nuget-packages-and-project-references)
 	- [Install Godot Addon](#install-godot-addon)
 	- [Configure Godot Project](#configure-godot-project)
 	- [Configure Visual Studio Code](#configure-visual-studio-code)
@@ -318,11 +318,51 @@ An experimental .NET Test Adapter for the Godot 4 game engine.
 
 # Installation
 
-## Install Nuget Packages
+## Install Nuget Packages and Project References
+
+Add the following `framework reference` to your `csproj`:
+
+`<FrameworkReference Include="Microsoft.AspNetCore.App" />`
+
+Add the following `nuget` packages to your `csproj` (you may keep these up to date with recent versions)
+
+```
+dotnet add package Microsoft.NET.Test.Sdk
+dotnet add package MSTest.TestFramework
+dotnet add package GodotSharp.TestAdapter
+```
+
+`IF:` you are using a multi project layout, you must also install the above nuget references in addition to adding those other projects as references to the main godot project (so the test proxy can find your assemblies)
+
+` <ProjectReference Include="..\MyOtherProject\MyOtherProject.csproj" />`
 
 ## Install Godot Addon
 
+Download a recent copy of the `GodotSharp.TestAdapter` addon archive from the releases page https://github.com/awesolabs/godotsharp-testadapter/releases
+
+Extract the `GodotSharp.TestAdapter` folder from the archive to your `addons/` folder. The final path should be `addons/GodotSharp.TestAdapter`
+
 ## Configure Godot Project
+
+Open your project with the Godot Editor
+
+Navigate `Project -> Project Settings`
+
+Toggle `advanced settings`
+
+Add the godot executable path setting for your respective platform. The setting will expand environment variables so your project configuration is portable across environments.
+
+| Platform | Setting Name                            | Example Path           | Example Env Var |
+| -------- | --------------------------------------- | ---------------------- | --------------- |
+| Windows  | godotsharp/testadapter/exe_path_windows | `c:\path\to\godot.exe` | `%GODOT4%`      |
+| Linux    | godotsharp/testadapter/exe_path_linux   | `/path/to/godot`       | `$GODOT4`       |
+| Macosx   | godotsharp/testadapter/exe_path_macosx  | `/path/to/godot`       | `$GODOT4`       |
+
+Example of setting the variable for windows:
+
+![Alt text](docs/editor-windows-custom-exe-path.png)
+
+![Alt text](docs/editor-windows-custom-setting.png)
 
 ## Configure Visual Studio Code
 
