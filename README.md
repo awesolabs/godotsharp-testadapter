@@ -1,6 +1,10 @@
 # GodotSharp.TestAdapter
 
-An experimental .NET Test Adapter for the Godot 4 game engine.
+An experimental .NET Test Adapter for the Godot 4 game engine. Provides In-Engine execution and debugging of tests using standard MSTest attributes across various IDEs. 
+
+Test are ran inside the Godot Engine runtime meaning you have full access to C#, your code, and all of Godot's managed runtime resources, and many of the test management features the IDEs provide.
+
+Feel free to open any of the [examples](examples/) in your favorite IDE on your platform to try it out. Check out [features](#features) for current known compatability.
 
 - [GodotSharp.TestAdapter](#godotsharptestadapter)
 - [Features](#features)
@@ -226,27 +230,27 @@ An experimental .NET Test Adapter for the Godot 4 game engine.
 </tr>
 <tr>
 	<td>Test Explorer -> Discover Tests	
-	<td>❌</td>	
+	<td>✅</td>	
 	<td>❓</td>	
 </tr>
 <tr>
 	<td>Test Explorer -> Run All
-	<td>❌</td>
+	<td>✅</td>
 	<td>❓</td>	
 </tr>
 <tr>
 	<td>Test Explorer -> Debug All
-	<td>❌</td>
+	<td>✅</td>
 	<td>❓</td>	
 </tr>
 <tr>
 	<td>Test Explorer -> Run Test
-	<td>❌</td>	
+	<td>✅</td>	
 	<td>❓</td>	
 </tr>
 <tr>
 	<td>Test Explorer -> Debug Test
-	<td>❌</td>	
+	<td>✅</td>	
 	<td>❓</td>	
 </tr>
 <tr>
@@ -256,12 +260,12 @@ An experimental .NET Test Adapter for the Godot 4 game engine.
 </tr>
 <tr>
 	<td>Code Editor -> Run Test
-	<td>❌</td>
+	<td>✅</td>
 	<td>❓</td>	
 </tr>
 <tr>
 	<td>Code Editor -> Debug Test
-	<td>❌</td>
+	<td>✅</td>
 	<td>❓</td>	
 </tr>
 <tbody>
@@ -332,7 +336,7 @@ dotnet add package MSTest.TestFramework
 dotnet add package GodotSharp.TestAdapter
 ```
 
-`IF:` you are using a multi project layout, you must also install the above nuget references in addition to adding those other projects as references to the main godot project (so the test proxy can find your assemblies)
+`IF:` you are using a multi project layout, you must also install the above nuget references in addition to adding your other projects as references to the main godot project (so the test proxy can find your assemblies)
 
 ` <ProjectReference Include="..\MyOtherProject\MyOtherProject.csproj" />`
 
@@ -350,7 +354,7 @@ Navigate `Project -> Project Settings`
 
 Toggle `advanced settings`
 
-Add the godot executable path setting for your respective platform. The setting will expand environment variables so your project configuration is portable across environments.
+Add the godot executable path setting for your respective platform. You may use environment variables in your paths as they will be expanded during test execution. This helps keep project configuration portable across developer and CI environments.
 
 | Platform | Setting Name                            | Example Path           | Example Env Var |
 | -------- | --------------------------------------- | ---------------------- | --------------- |
@@ -366,19 +370,41 @@ Example of setting the variable for windows:
 
 ## Configure Visual Studio Code
 
-TBD
+Install C# extensions https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp `or` https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit 
+
+After installation ensure your project solution builds and restart visual studio code. Navigate to Test Explorer and click on the refresh icon to find your tests, or navigate to a test file and run tests from the editor.
+
+![Alt text](docs/vscode-test-explorer-and-code.png)
 
 ## Configure JetBrains Rider
 
-TBD
+`NOTE:` Its possible the Rider Godot Plugin interfers with running the test adapter. Mileage may vary report your results.
+
+Open `File -> Settings -> Build, Execution, Deployment -> Unit Testing`
+
+Open `VSTest` and select `Enable VSTest adapters support`
+
+Under `MSTest` set `Test Discovery` to `Metadata` and provide Rider with a path to your Visual Studio installation or other vstest.console program example:
+
+```
+C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE
+```
+
+![Alt text](docs/rider-vstest-settings.png)
+
+![Alt text](docs/rider-mstest-settings.png)
+
+![Alt text](docs/rider-test-explorer-and-editor.png)
 
 ## Configure Visual Studio
 
-TBD
+Ensure your solution builds. Beyond that it appears no other configuration is needed.
+
+![Alt text](docs/vs-test-explorer-and-editor.png)
 
 ## Configure Godot Editor
 
-TBD
+No support for the Godot Editor yet. Would be neat though.
 
 # Resources
 

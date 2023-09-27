@@ -21,6 +21,6 @@ project/assembly_name="SingleProject"
 
 [godotsharp]
 
-testadapter/exe_path_windows="%FGODOT4%"
+testadapter/exe_path_windows="%GODOT4%"
 testadapter/exe_path_linux="$GODOT4"
 testadapter/exe_path_macosx="$GODOT4"
